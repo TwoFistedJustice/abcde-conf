@@ -69,3 +69,51 @@ Relevant man pages:
 - [CD Paranoia](https://linux.die.net/man/1/cdparanoia): Reads the CD
 - [Icedax](https://linux.die.net/man/1/icedax): Writes the .wav file (mono vs stereo settings)
 -(cdda2wav(1))[https://linux.die.net/man/1/cdda2wav]: Writes the .wav file
+
+
+
+**Typical Output looks like:**
+```shell
+# => 1 item in total.
+copying cover to target directory /home/hoo/Music/flac/INXS-Live Baby Live
+Grabbing tracks 01 - 16 as one track ...
+cdparanoia III release 10.2 (September 11, 2008)
+
+Ripping from sector       0 (track  0 [0:00.00])
+	  to sector  287001 (track 16 [6:16.61])
+
+outputting to /home/hoo/abcde.f20ef210/track01.wav
+
+ (== PROGRESS == [                              | 287001 00 ] == :^D * ==)   
+
+Done.
+
+
+ echo Encoding track 01 of 01: Live Baby Live...
+Encoding track 01 of 01: Live Baby Live...
+encodetrack-flac-01 nice -n 10 flac -f -s -e -V -8 -o /home/hoo/abcde.f20ef210/track01.flac /home/hoo/abcde.f20ef210/track01.wav
+encodetrack-01 true
+ echo Tagging track 01 of 01: Live Baby Live...
+Tagging track 01 of 01: Live Baby Live...
+tagtrack-flac-01 nice -n 10 metaflac --no-utf8-convert --import-cuesheet-from=/home/hoo/abcde.f20ef210/cue-f20ef210.txt --import-tags-from=- /home/hoo/abcde.f20ef210/track01.flac
+tagtrack-01 true
+Adding metadata to the cue file...
+movetrack-01 mv /home/hoo/abcde.f20ef210/track01.flac /home/hoo/Music/flac/INXS-Live Baby Live/Live Baby Live.flac
+movetrack-output-flac true
+movecue-flac cp /home/hoo/abcde.f20ef210/cue-f20ef210.txt /home/hoo/Music/flac/INXS-Live Baby Live/Live Baby Live.flac.cue
+Successfully embedded the album art into your flac tracks
+Finished.
+
+```
+
+
+
+**Troubleshooting:**
+**Flashing Done**
+If it's flashing "Done" and doesn't immediately move to the Encoding cycle, it's hung. Hit Ctrl-C and start over.
+
+
+**No album art**
+It means the selected CDDB list didn't have the art. 
+Disable non-interactive mode in the conf file and choose another data set.
+
