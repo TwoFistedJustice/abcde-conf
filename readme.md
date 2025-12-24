@@ -109,6 +109,30 @@ Finished.
 
 
 **Troubleshooting:**
+
+**No Album Art Found**
+Set in .abcde.conf file
+METAFLACOPTS=--import-picture-from="|image/png||LengthxWidthxBit-depth|/path/to/image.png"
+Example:
+METAFLACOPTS=--import-picture-from="|image/png||474x474x24|/home/hoo/Pictures/album-covers/u2.png"
+
+[metaflac man page](https://linux.die.net/man/1/metaflac)
+
+**No Entries found / You don't like the available options**
+comment out whichever DB is used and uncomment out the other.
+i.e. if it's set for Musicbrainz, set it for another one.
+```editorconfig
+CDDBMETHOD=cddb
+CDDBURL="http://gnudb.gnudb.org/~cddb/cddb.cgi"
+#comment out the url if musicbrainz is used
+# CDDBMETHOD=musicbrainz
+```
+
+
+
+
+
+
 **Flashing Done**
 If it's flashing "Done" and doesn't immediately move to the Encoding cycle, it's hung. Hit Ctrl-C and start over.
 
@@ -116,4 +140,36 @@ If it's flashing "Done" and doesn't immediately move to the Encoding cycle, it's
 **No album art**
 It means the selected CDDB list didn't have the art. 
 Disable non-interactive mode in the conf file and choose another data set.
+
+**Stops encoding flac files.**
+If it gives some mysterious message about the flac file might not exist... might be a bad config file.
+Replace it with a known good one and see if it works. (it will)
+
+
+**Repeated SCSI Read Errors**
+
+There is disc damage. CDParanoia will persist until it gets good data. It will generate an error and quit if it can't. This can take hours, or days.
+It doesn't read sequentially. The thing to watch is the PROGRESS bar. The weird symbols are generated are messages. See [cdparanoia man page](https://linux.die.net/man/1/cdparanoia)
+
+As long as the sector in the progress number changes over time, it's working. It can take a lot of hours to move even a little.  Patiently waiting is the key.
+
+```shell
+...
+scsi_read error: sector=257166 length=1 retry=5
+                 Sense key: 3 ASC: 11 ASCQ: 0
+                 Transport error: Medium reading data from medium
+System error: Input/output error
+(== PROGRESS == [                     ++++eee> | 256821 00 ] == :-0 . ==)   scsi_read error: sector=257193 length=27 retry=0
+                 Sense key: 3 ASC: 11 ASCQ: 0
+                 Transport error: Medium reading data from medium
+                 System error: Input/output error
+
+scsi_read error: sector=257166 length=1 retry=6
+                 Sense key: 3 ASC: 11 ASCQ: 0
+                 Transport error: Medium reading data from medium
+                 System error: Input/output error
+scsi_read error: sector=257166 length=1 retry=7
+...
+```
+
 
